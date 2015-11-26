@@ -47,6 +47,23 @@ namespace tryParse
             }
         }
 
+        public static void GetFullInformation(HtmlDocument html)
+        { 
+            var divs = html.DocumentNode.SelectNodes("//div[@class='col-md-5 col-sm-5 col-xs-5']");
+            var divs1 = html.DocumentNode.SelectNodes("//div[@class='col-md-5 col-sm-5 col-xs-5 boldInfo']");
+
+
+            for (int i = 0; i < divs.Count; i++)
+            {
+                string str = divs[i].FirstChild.InnerText;
+                str = str.Remove(0, 7);
+                string str1 = divs1[i].FirstChild.InnerText;
+
+                Console.WriteLine("{0} {1}", str, str1);
+            }
+
+        }
+
         public static void GetId(HtmlDocument html)
         {
 
@@ -74,7 +91,7 @@ namespace tryParse
                 Console.WriteLine();
                 i++;
 
-
+                GetFullInformation(html2);
 
                 //byte[] bytes = Encoding.Default.GetBytes(str1);
                 //var myString = Encoding.UTF32.GetString(bytes);
@@ -92,7 +109,7 @@ namespace tryParse
         {
             var b = 1.0d;
 
-            for (int i = 1; i < a; i++)
+            for (int i = 1; i <= 1; i++)
             {
                 var url2 =
                     $"http://www.grekodom.ru/RealtyObjects?multiType=null&multiRegion=null&type=undefined&subregion=undefined&span=undefined&distance=0&sortFilter=0&aim=0&squarefrom=0&squareto=&pricefrom=0&priceto=&roomF=0&roomT=&yearBuilt=0&area=0&seaView=false&pool=false&parking=false&furniture=false&heat=false&ds=0&page={i}";
@@ -119,6 +136,7 @@ namespace tryParse
 
         static void Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.GetEncoding(1251);
             //var url = (
             //    @"http://www.grekodom.ru/RealtyObjects?multiType=null&multiRegion=null&type=undefined&subregion=undefined&span=undefined&distance=0&sortFilter=0&aim=0&squarefrom=0&squareto=&pricefrom=0&priceto=&roomF=0&roomT=&yearBuilt=0&area=0&seaView=false&pool=false&parking=false&furniture=false&heat=false&ds=0");
 
