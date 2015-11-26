@@ -20,26 +20,14 @@ namespace tryParse
 
         static int GetPagesCount(HtmlDocument html)
         {
-            //var liNodes = html.GetElementbyId("nav-pages").ChildNodes.Where(x => x.Name == "li");
-            //HtmlAttribute href = liNodes.Last().FirstChild.Attributes["href"];
-            //int pagesCount = (int)Char.GetNumericValue(href.Value[href.Value.Length - 2]);
 
             var divs = html.DocumentNode.SelectSingleNode("//span[@class='col-md-6']"); //SelectNodes("//span[@class='col-md-6']");
 
             int a = 0;
             int numberOfPosition = 0;
-            //foreach (var span in divs)
-            //{
-            //    //a++;
-            //    //Console.WriteLine(span.FirstChild.InnerText);
-            //    string str = span.FirstChild.InnerText;
-            //    numberOfPosition = Convert.ToInt32(str.Remove(6));
-            //}
 
             string str = divs.FirstChild.InnerText;
             numberOfPosition = Convert.ToInt32(str.Remove(6));
-
-            //    numberOfPosition = Convert.ToInt32(str.Remove(6));
 
             return numberOfPosition;
         }
@@ -57,6 +45,75 @@ namespace tryParse
                 return sReader.ReadToEnd();
 
             }
+        }
+
+        public static void GetId(HtmlDocument html)
+        {
+
+            var spans = html.DocumentNode.SelectNodes("//span[@class='area']"); //SelectNodes("//span[@class='col-md-6']");
+
+            int i = 1;
+
+            foreach (var span in spans)
+            {
+                string str1 = span.LastChild.InnerText;
+                str1 = str1.Remove(0, 1);
+
+                var url3 = $"http://www.grekodom.ru/realtyobject/{str1}";
+
+                Console.WriteLine("  " + i + ")" + " " + str1);
+                Console.WriteLine("   " + url3);
+
+                //_____________________________________________________________________________________________________________
+                var w2Client = new WebClient();
+                w2Client.Proxy = null;
+                w2Client.Encoding = encode;
+                var html2 = new HtmlDocument();
+
+                html2.LoadHtml(w2Client.DownloadString(url3));
+                Console.WriteLine();
+                i++;
+
+
+
+                //byte[] bytes = Encoding.Default.GetBytes(str1);
+                //var myString = Encoding.UTF32.GetString(bytes);
+                //________________________________________________________________________________________________________________
+
+
+
+            }
+
+
+
+        }
+
+        public static void GetPages(int a, string url)
+        {
+            var b = 1.0d;
+
+            for (int i = 1; i < a; i++)
+            {
+                var url2 =
+                    $"http://www.grekodom.ru/RealtyObjects?multiType=null&multiRegion=null&type=undefined&subregion=undefined&span=undefined&distance=0&sortFilter=0&aim=0&squarefrom=0&squareto=&pricefrom=0&priceto=&roomF=0&roomT=&yearBuilt=0&area=0&seaView=false&pool=false&parking=false&furniture=false&heat=false&ds=0&page={i}";
+
+
+                GetHtmlString(url2);
+
+                b = ((i / a) * 100d);
+
+                Console.WriteLine(i + "/" + a + "                  " + b + " %");
+
+                var w1Client = new WebClient();
+                w1Client.Proxy = null;
+                w1Client.Encoding = encode;
+                var html1 = new HtmlDocument();
+
+                html1.LoadHtml(w1Client.DownloadString(url2));
+
+                GetId(html1);
+            }
+
         }
 
 
@@ -85,19 +142,24 @@ namespace tryParse
             Console.WriteLine("Number Of Positions = " + GetPagesCount(html));
             Console.WriteLine("Number Of sites = " + a);
 
-            var b = 1.0d;
+            GetPages(a, url); //обход страниц сайта
 
-            for (double i = 1.0; i < a; i++)
-            {
-                var url2 =
-                    $"http://www.grekodom.ru/RealtyObjects?multiType=null&multiRegion=null&type=undefined&subregion=undefined&span=undefined&distance=0&sortFilter=0&aim=0&squarefrom=0&squareto=&pricefrom=0&priceto=&roomF=0&roomT=&yearBuilt=0&area=0&seaView=false&pool=false&parking=false&furniture=false&heat=false&ds=0&page={i}";
-                GetHtmlString(url2);
 
-                b = ((i / a) * 100d);
 
-                Console.WriteLine(i + "/" + a + "                  " + b + " %");
 
-            }
+            //var b = 1.0d;
+
+            //for (double i = 1.0; i < a; i++)
+            //{
+            //    var url2 =
+            //        $"http://www.grekodom.ru/RealtyObjects?multiType=null&multiRegion=null&type=undefined&subregion=undefined&span=undefined&distance=0&sortFilter=0&aim=0&squarefrom=0&squareto=&pricefrom=0&priceto=&roomF=0&roomT=&yearBuilt=0&area=0&seaView=false&pool=false&parking=false&furniture=false&heat=false&ds=0&page={i}";
+            //    GetHtmlString(url2);
+
+            //    b = ((i / a) * 100d);
+
+            //    Console.WriteLine(i + "/" + a + "                  " + b + " %");
+
+            //}
 
             //var html = new HtmlDocument();
             //html.LoadHtml(new WebClient().DownloadString("http://www.grekodom.ru/RealtyObjects?multiType=null&multiRegion=null&type=undefined&subregion=undefined&span=undefined&distance=0&sortFilter=0&aim=0&squarefrom=0&squareto=&pricefrom=0&priceto=&roomF=0&roomT=&yearBuilt=0&area=0&seaView=false&pool=false&parking=false&furniture=false&heat=false&ds=0"));
