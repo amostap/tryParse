@@ -20,7 +20,7 @@ namespace tryParse
         public static Encoding encode = Encoding.GetEncoding("utf-8");                  //задаем кодировку
 
         //получаем всю стараницу с кодировкой
-        public static string GetFullHtmlAsString(string url)                                  
+        public static string GetFullHtmlAsString(string url)
         {
             request = WebRequest.Create(url);
             request.Proxy = null;
@@ -35,6 +35,7 @@ namespace tryParse
         //Проходим по страницам
         public static void MovingOnPages(int numberOfPages, string url)
         {
+            //for (var i = 1; i <= numberOfPages; i++)
             for (var i = 1; i <= 1; i++)
             {
                 var url2 =
@@ -72,27 +73,63 @@ namespace tryParse
         public static void GetMainInformation(HtmlDocument html)
         {
 
-            //var divs = html.DocumentNode.SelectNodes("//div[@class='additional-amenities']//div[@class='col-md-5 col-sm-5 col-xs-5']");
+            //var imgs = html.DocumentNode.Descendants("//div[@class='rsSlide ']//img/@src");
+
+            var imgs = html.DocumentNode.SelectNodes("//img");
+            var divs = html.DocumentNode.SelectNodes("//div[@class='col-md-5 col-sm-5 col-xs-5'] | //div[@class='col-md-5 col-sm-5 col-xs-5 ']");
+            var divs1 = html.DocumentNode.SelectNodes("//div[@class='col-md-5 col-sm-5 col-xs-5 boldInfo'] | //div[@class='col-md-10 col-sm-10 col-xs-10 boldInfo']");
+            var divs2 = html.DocumentNode.SelectNodes("//div[@class='additional-amenities']//p");
             //var divs = html.DocumentNode.SelectNodes("//div[@class='col-md-5 col-sm-5 col-xs-5']");
-            var divs  = html.DocumentNode.SelectNodes("//div[@class='col-md-5 col-sm-5 col-xs-5']");
-            var divs1 = html.DocumentNode.SelectNodes("//div[@class='col-md-5 col-sm-5 col-xs-5 boldInfo']");
-            var divs3 = html.DocumentNode.SelectNodes("//div[@class='additional-amenities']");
+            //var divs1 = html.DocumentNode.SelectNodes("//div[@class='col-md-5 col-sm-5 col-xs-5']");
+            //var divs2 = html.DocumentNode.SelectNodes("//div[@class='col-md-5 col-sm-5 col-xs-5 boldInfo']");
+            //var divs3 = html.DocumentNode.SelectNodes("//div[@class='additional-amenities']");
 
             //Console.WriteLine("{0} {1}", divs.Count, divs1.Count);
 
-            foreach (var i in divs3)
-            {
-                Console.WriteLine(i.SelectNodes("//*[@class='col-md-5 col-sm-5 col-xs-5 ']").Count);
-
-            }
-
-            //for (var i = 0; i < divs.Count; i++)
+            //foreach (var i in divs3)
             //{
-            //    string str = divs[i].FirstChild.InnerHtml;
-            //    string str1 = divs1[i].FirstChild.InnerText;           
-            //    Console.WriteLine((i+1) + "{0} {1}", str, str1);
-                
+            //    Console.WriteLine(i.SelectNodes("//*[@class='col-md-5 col-sm-5 col-xs-5 ']").Count);
+            //    Console.WriteLine(i.SelectNodes("//*[@class='col-md-5 col-sm-5 col-xs-5']").Count);
             //}
+
+
+            try
+            {
+                for (var i = 0; i < divs.Count; i++)
+                {
+
+                    if (i == 0 && imgs != null)
+                    {
+                        foreach (var img in imgs)
+                        {
+                            Console.WriteLine(
+                            img.GetAttributeValue("src", null));
+                        }
+                    }
+
+
+                    string str = divs[i].FirstChild.InnerHtml;
+                    string str1 = divs1[i].FirstChild.InnerText;
+                    Console.WriteLine((i + 1) + "{0} {1}", str, str1);
+                    if (divs.Count - 1 == i)
+                    {
+                        foreach (var p in divs2)
+                        {
+                            if (p.InnerText == "")
+                                Console.WriteLine("------=======EMPTY======-------");
+                            else
+                            {
+                                Console.WriteLine(p.InnerHtml);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Console.WriteLine("FUCK THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }
         }
 
 
@@ -106,7 +143,7 @@ namespace tryParse
             foreach (var span in spans)
             {
                 string str1 = span.LastChild.InnerText;
-                str1        = str1.Remove(0, 1);
+                str1 = str1.Remove(0, 1);
 
                 var url3 = $"http://www.grekodom.ru/realtyobject/{str1}";
 
