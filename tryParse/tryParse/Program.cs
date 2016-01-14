@@ -22,6 +22,7 @@ namespace tryParse
         //получаем всю стараницу с кодировкой
         public static string GetFullHtmlAsString(string url)
         {
+
             request = WebRequest.Create(url);
             request.Proxy = null;
             response = request.GetResponse();
