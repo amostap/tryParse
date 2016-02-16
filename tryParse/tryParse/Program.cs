@@ -131,7 +131,7 @@ namespace tryParse
         //`post_content_filtered`,`post_parent`,`guid`,`menu_order`,
         //`post_type`,`post_mime_type`,`comment_count`) values
 
-        public static void GenerateSqlToPosts(string Id, string postContent, string pictures, string title)
+        public static void GenerateSqlToPosts(string id, string postContent, string pictures, string title)
         {
             using (SwForPosts = File.AppendText(PathForPosts))
             {
@@ -142,7 +142,7 @@ namespace tryParse
                 //                     "`post_content_filtered`,`post_parent`,`guid`,`menu_order`," +
                 //                     "`post_type`,`post_mime_type`,`comment_count`) values");
 
-                SwForPosts.WriteLine($"({Id}," +                                                   //ID
+                SwForPosts.WriteLine($"({id}," +                                                   //ID
                                      $"1," +                                                       //post_author
                                      $"'{DateTime.Now.ToString("u").Replace("Z", "")}'," +         //post_date
                                      $"'{DateTime.Now.ToString("u").Replace("Z", "")}'," +         //post_date_gmt  
@@ -153,14 +153,14 @@ namespace tryParse
                                      $"'open'," +                                                  //comment_status
                                      $"'closed'," +                                                //ping_status
                                      $"''," +                                                      //post_password
-                                     $"'{Id}'," +                                             //post_name
+                                     $"'{id}'," +                                             //post_name
                                      $"''," +                                                      //to_ping
                                      $"''," +                                                      //pinged
                                      $"'{DateTime.Now.ToString("u").Replace("Z", "")}'," +         //post_modified
                                      $"'{DateTime.Now.ToString("u").Replace("Z", "")}'," +         //post_modified_gmt
                                      $"''," +                                                      //post_content_filtered
                                      $"0," +                                                       //post_parent
-                                     $"'http://www.markstanley.estate/?post_type=realty&#038;p={Id}'," +  //guid
+                                     $"'http://www.markstanley.estate/?post_type=realty&#038;p={id}'," +  //guid
                                      $"0," +                                                       //menu_order
                                      $"'realty'," +                                                //post_type
                                      $"''," +                                                      //post_mime_type
@@ -307,7 +307,7 @@ namespace tryParse
                         case "Другие удобства:":
 
                             var str = secondCol;
-                            var words = str.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                            var words = str.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
                             foreach (var word in words)
                             {
@@ -322,9 +322,6 @@ namespace tryParse
                             }
                             
                             break;
-                        
-                            default:
-                            break;
                     }
 
                     if (firstColumn.Count - 1 == i)
@@ -335,7 +332,7 @@ namespace tryParse
                                 Console.WriteLine();
                             else
                             {
-                                descr += (p.InnerText+"/n");
+                                descr += (p.InnerText);
                             }
                         }
                     }
